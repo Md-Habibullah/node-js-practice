@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from 'express'
+import express, { Application, NextFunction, Request, Response } from 'express'
 import fs from 'fs';
 import path from 'path';
 import { todosRouter } from './app/todos/todos.routes';
@@ -10,11 +10,16 @@ const userRouter = express.Router();
 app.use('/todos', todosRouter);
 app.use('/users', userRouter);
 
+const logger = (req: Request, res: Response, next: NextFunction) => {
+    console.log({
+        utl: req.url,
+        method: req.method,
+        header: req.header
+    })
+    next()
+}
 
-
-const filePath = path.join(__dirname, '../db/todo.json')
-
-app.get('/', (req: Request, res: Response) => {
+app.get('/', logger, (req: Request, res: Response) => {
     console.log()
     res.send('I am learning express JS with typescript!')
 })

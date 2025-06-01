@@ -4,15 +4,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const path_1 = __importDefault(require("path"));
 const todos_routes_1 = require("./app/todos/todos.routes");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 const userRouter = express_1.default.Router();
 app.use('/todos', todos_routes_1.todosRouter);
 app.use('/users', userRouter);
-const filePath = path_1.default.join(__dirname, '../db/todo.json');
-app.get('/', (req, res) => {
+const logger = (req, res, next) => {
+    console.log({
+        utl: req.url,
+        method: req.method,
+        header: req.header
+    });
+    next();
+};
+app.get('/', logger, (req, res) => {
     console.log();
     res.send('I am learning express JS with typescript!');
 });
