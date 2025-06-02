@@ -1,6 +1,4 @@
 import express, { Application, NextFunction, Request, Response } from 'express'
-import fs from 'fs';
-import path from 'path';
 import { todosRouter } from './app/todos/todos.routes';
 const app: Application = express();
 app.use(express.json());
@@ -19,9 +17,39 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
     next()
 }
 
-app.get('/', logger, (req: Request, res: Response) => {
-    console.log()
-    res.send('I am learning express JS with typescript!')
+app.get('/', logger, async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        // console.log(something)
+        res.send('Welcome to the todos app')
+    } catch (error) {
+        // console.log(error)
+        // res.status(400).send({ message: "something went wrong", error })
+        next(error)
+    }
+})
+
+app.get('/error', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        // console.log(something)
+        res.send('welcome to error er duniya')
+    } catch (error) {
+        next(error)
+    }
+})
+
+// app.all(/.*/, async (req: Request, res: Response) => {
+//     res.status(404).send({ message: "Route not found" });
+// });
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+    res.status(404).send({ message: "Route not found" });
+})
+
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+    if (error) {
+        console.log(error)
+        res.status(400).send({ message: "something went wrong", error })
+    }
 })
 
 export default app;
