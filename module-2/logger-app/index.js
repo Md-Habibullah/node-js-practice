@@ -5,7 +5,7 @@ const inputArguments = process.argv.slice(2);
 const text = inputArguments.join(" ");
 const timeStame = new Date().toISOString();
 const message = `${text} ${timeStame} \n`;
-// console.log(timeStame)
+// console.log(message)
 
 const pathName = path.join(__dirname, "log.txt");
 
